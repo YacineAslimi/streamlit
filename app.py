@@ -3,23 +3,26 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
+# Initialize session state
+if 'data_input' not in st.session_state:
+    st.session_state['data_input'] = ""
+
 st.title('Basic Statistical Analysis App')
 
 # Option for user to choose data input method
 data_option = st.selectbox("Choose your data input method", ["Enter Data", "Generate Fake Data"])
 
-data_input = ""
 if data_option == "Enter Data":
-    data_input = st.text_area("Enter your data, separated by commas:")
+    st.session_state.data_input = st.text_area("Enter your data, separated by commas:")
 elif data_option == "Generate Fake Data":
     if st.button("Generate Data"):
-        data_input = ",".join([str(np.random.rand()) for _ in range(100)])
+        st.session_state.data_input = ",".join([str(np.random.rand()) for _ in range(100)])
 
 if st.button('Analyze'):
-    if data_input:
+    if st.session_state.data_input:
         try:
             # Convert the input data into a list of numbers
-            data = np.array(data_input.split(','), dtype=float)
+            data = np.array(st.session_state.data_input.split(','), dtype=float)
 
             # Perform basic statistical analysis
             mean = np.mean(data)
